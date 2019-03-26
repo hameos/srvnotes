@@ -7,11 +7,11 @@ function ApplySchema(db) {
         properties: {
            title: {
               bsonType: 'string',
-              description: 'username must be a string and is required'
+              description: 'title must be a string and is required'
            },
            content: {
             bsonType: 'string',
-            description: 'password must be a binData and is required'
+            description: 'content must be a string and is required'
            }
         }
      } },
