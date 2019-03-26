@@ -32,12 +32,12 @@ server.get("*", (req, res, next) => {
     <div id="app"></div>
     <script src="http://${HOST_IP}:${HOST_PORT}/main.js"></script>
   </body>
-  </html> 
+  </html>
   `
   res.send(html)
 })
 
 
-server.listen(HOST_PORT, HOST_IP, () => {
+server.listen(HOST_PORT, () => {
   console.log("Server running - ", HOST_PORT, HOST_IP)
 })
