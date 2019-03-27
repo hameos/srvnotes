@@ -25,7 +25,8 @@ const config = {
       $CONFIG: JSON.stringify({
         ip:'127.0.0.1',
         port:'80',
-        www:'/root/Projects/deliver_1/public'
+        www:path.resolve(__dirname + '/../', 'public'),
+        db:'mongodb://127.0.0.1:27017/notesdb'
       })
     }),
   ],

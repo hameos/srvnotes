@@ -4,9 +4,10 @@ import ApplySchema from './DBValidation'
 
 const COLLECTION = 'Notes'
 
+const {db:DBURL} = $CONFIG
+
 const dbclient = (function () {
   let database = undefined
-  const DBURL = 'mongodb://127.0.0.1:27017/notesdb'
 
   // Connect to database
   MongoClient.connect(DBURL, function (err, connection) {
@@ -85,7 +86,7 @@ const dbclient = (function () {
       let {id, ...rest} = input
       let query = {id: new ObjectId(id), ...rest}
 
-      
+
       if (isNullOrUndefined(query.title)) {
         throw new Error('title field required')
       }
@@ -93,7 +94,7 @@ const dbclient = (function () {
       if (isNullOrUndefined(query.content)) {
         throw new Error('content field required')
       }
-      
+
 
       let collection = database.db().collection(COLLECTION)
       return collection.updateOne({_id: query.id}, {$set: rest})
@@ -117,8 +118,8 @@ const dbclient = (function () {
       return collection.findOneAndUpdate({_id}, {$set: rest})
     })
     .then(({value}) => ({
-      id: value._id.toString(), 
-      title: value.title, 
+      id: value._id.toString(),
+      title: value.title,
       content: value.content
     }))
   }
