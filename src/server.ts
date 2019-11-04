@@ -1,20 +1,21 @@
-import Express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-
+import Express from 'express'
+import * as Config from './config'
 import NotesRouter from './notes-router'
 
-const {ip:HOST_IP, port:HOST_PORT, www:WWW_PATH} = $CONFIG
+const { IP: HOST_IP, PORT: HOST_PORT, WWW: WWW_PATH } = Config
+
+console.log('www', WWW_PATH)
 
 const server = Express()
 server.use(Express.static(WWW_PATH))
 server.use(bodyParser.json())
 server.use(cors())
 
-
 NotesRouter(server)
 
-server.get("*", (req, res, next) => {
+server.get('*', (req, res) => {
   console.log('get *', req.url)
 
   const html = `
@@ -36,7 +37,6 @@ server.get("*", (req, res, next) => {
   res.send(html)
 })
 
-
 server.listen(HOST_PORT, () => {
-  console.log("Server running - ", HOST_PORT, HOST_IP)
+  console.log('Server running - ', HOST_PORT, HOST_IP)
 })

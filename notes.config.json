@@ -1,0 +1,7 @@
+{
+  "IP": "127.0.0.1",
+  "PORT": "8080",
+  "WWW": "../../client_remote/clinotes/public",
+  "DB": "mongodb://127.0.0.1:27017/notesdb",
+  "TABLE": "Notes"
+}

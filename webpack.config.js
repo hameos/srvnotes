@@ -1,38 +1,23 @@
 const path = require('path')
-const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
 
-
 const config = {
-  entry: [
-    './src/server.js'
-  ],
+  entry: ['./src/server.ts'],
   mode: 'development',
   target: 'node',
   externals: [nodeExternals()],
   module: {
-    rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
-    ]
+    rules: [{ test: /\.ts$/, exclude: /node_modules/, loader: 'babel-loader' }],
   },
   output: {
-    path: path.resolve(__dirname, ''),
+    path: path.resolve(__dirname, 'lib'),
     filename: 'serverout.js',
   },
-
-  plugins: [
-    new webpack.DefinePlugin({
-      $CONFIG: JSON.stringify({
-        ip:'127.0.0.1',
-        port:'80',
-        www:path.resolve(__dirname + '/../', 'public'),
-        db:'mongodb://127.0.0.1:27017/notesdb'
-      })
-    }),
-  ],
+  resolve: {
+    extensions: ['.ts', '.json'],
+  },
 
   devtool: 'source-map',
 }
 
 module.exports = config
-
