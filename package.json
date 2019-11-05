@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "export NODE_ENV=development && webpack",
+    "prod": "export NODE_ENV=production && webpack --config webpack.config.prod.js",
     "build-babel": "babel src --out-dir lib --extensions '.ts,.tsx'",
     "tsc": "tsc",
     "start": "node lib/serverout.js",
