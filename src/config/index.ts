@@ -1,18 +1,6 @@
-import { readFileSync } from 'fs'
-import { NotesConfig } from '../declarations'
+import 'dotenv/config'
 
-let conf: NotesConfig
-
-try {
-  const confRAW = readFileSync('./notes.config.json')
-  conf = JSON.parse(confRAW.toString())
-} catch (e) {
-  console.log('Error during loading notes.config.json')
-  throw e
-}
-
-export const IP = conf.IP
-export const PORT = conf.PORT
-export const WWW = conf.WWW
-export const DB = conf.DB
-export const COLLECTION = conf.TABLE
+export const IP = process.env.IP as string
+export const PORT = process.env.PORT as string
+export const DB = process.env.DB as string
+export const COLLECTION = process.env.TABLE as string

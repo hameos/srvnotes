@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb'
 export interface NotesConfig {
   IP: string
   PORT: string
-  WWW: string
+  S3: string
   DB: string
   TABLE: string
 }

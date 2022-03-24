@@ -6,25 +6,25 @@ export default function NotesRouter(app: Express): void {
 
   app
     .route('/notes')
-    .get(function(req, res) {
+    .get(function (req, res) {
       console.log('get /notes')
 
       dbclient
         .list()
-        .then(data => {
+        .then((data) => {
           res.send({ data })
         })
-        .catch(e => {
+        .catch((e) => {
           res.status(500).send({ message: e.message })
         })
     })
-    .post(function(req, res) {
+    .post(function (req, res) {
       console.log('post /notes')
       const data = req.body
 
       dbclient
         .insert({ title: data.title, content: data.content })
-        .then(val => {
+        .then((val) => {
           const resdata = {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             id: (val.insertedId as any).toString(),
@@ -33,7 +33,7 @@ export default function NotesRouter(app: Express): void {
           }
           res.send({ data: resdata })
         })
-        .catch(e => {
+        .catch((e) => {
           res.status(500).send({ message: e.message })
         })
     })
@@ -42,20 +42,20 @@ export default function NotesRouter(app: Express): void {
 
   app
     .route('/notes/:noteId')
-    .get(function(req, res) {
+    .get(function (req, res) {
       console.log('get /notes/:noteId', req.body)
 
       const id = req.params.noteId
       dbclient
         .list({ id })
-        .then(data => {
+        .then((data) => {
           res.send({ data })
         })
         .catch(({ message }) => {
           res.status(500).send({ message })
         })
     })
-    .put(function(req, res) {
+    .put(function (req, res) {
       console.log('put /notes/:noteId', req.body)
 
       const id = req.params.noteId
@@ -66,14 +66,14 @@ export default function NotesRouter(app: Express): void {
 
       dbclient
         .update(data)
-        .then(data => {
+        .then((data) => {
           res.send({ data })
         })
         .catch(({ message }) => {
           res.status(500).send({ message })
         })
     })
-    .patch(function(req, res) {
+    .patch(function (req, res) {
       console.log('patch /notes/:noteId', req.body)
 
       const id = req.params.noteId
@@ -84,21 +84,21 @@ export default function NotesRouter(app: Express): void {
 
       dbclient
         .updatePartial(data)
-        .then(data => {
+        .then((data) => {
           res.send({ data })
         })
         .catch(({ message }) => {
           res.status(500).send({ message })
         })
     })
-    .delete(function(req, res) {
+    .delete(function (req, res) {
       console.log('delete /notes/:noteId', req.body)
 
       const id = req.params.noteId
 
       dbclient
         .delete({ id })
-        .then(data => {
+        .then((data) => {
           res.send({ data })
         })
         .catch(({ message }) => {

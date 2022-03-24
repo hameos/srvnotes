@@ -14,7 +14,7 @@ const config = {
     filename: 'serverout.js',
   },
   resolve: {
-    extensions: ['.ts', '.json'],
+    extensions: ['.ts'],
   },
 
   devtool: 'source-map',

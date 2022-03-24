@@ -1,25 +1,28 @@
 import { MongoClient, ObjectId } from 'mongodb'
-import { isNullOrUndefined } from 'util'
-import { COLLECTION, DB as DBURL } from '../config'
+import { isNullOrUndefined } from '../utils'
+import { COLLECTION, DB } from '../config'
 import { InputNote, Note } from '../declarations'
 import ApplySchema from './DBValidation'
 
-const dbclient = (function() {
+const DBURL = DB as string
+
+const dbclient = (function () {
   let database: MongoClient
 
   // Connect to database
-  MongoClient.connect(DBURL, function(err, connection) {
+  MongoClient.connect(DBURL, function (err, connection) {
     if (err) {
       throw err
     } else {
+      if (!connection) throw new Error('connection with invalid value', connection)
       database = connection
 
-      database.db().collections(function(err, collections) {
-        const exist = collections.some(
-          elem => elem.collectionName == COLLECTION
-        )
+      database.db().collections(function (err, collections) {
+        if (!collections) throw new Error('collections with invalid value', collections)
+
+        const exist = collections.some((elem) => elem.collectionName == COLLECTION)
         if (!exist) {
-          database.db().createCollection(COLLECTION, function(err) {
+          database.db().createCollection(COLLECTION, function (err) {
             if (err) throw err
 
             ApplySchema(database.db())
@@ -43,21 +46,20 @@ const dbclient = (function() {
     console.log('document removed')
 
     return Promise.resolve(input)
-      .then(input => {
-        if (isNullOrUndefined(input.id))
-          throw new Error('id field is not defined')
+      .then((input) => {
+        if (isNullOrUndefined(input.id)) throw new Error('id field is not defined')
 
         const collection = database.db().collection(COLLECTION)
         return collection.remove({ _id: new ObjectId(input.id) })
       })
-      .then(output => !!output.result.n)
+      .then((output) => !!output.result.n)
   }
 
   function list(input: InputNote = {}) {
     console.log('document list')
 
     return Promise.resolve(input)
-      .then(input => {
+      .then((input) => {
         const { id } = input
         const query: { _id?: ObjectId } = {}
         if (!isNullOrUndefined(id)) {
@@ -68,7 +70,7 @@ const dbclient = (function() {
         return collection.find(query).toArray()
       })
 
-      .then(arr => {
+      .then((arr) => {
         if (arr.length <= 0) {
           throw new Error(`Note id=${input.id} not found`)
         }
@@ -100,15 +102,12 @@ const dbclient = (function() {
 
         const query: Note = {
           _id: new ObjectId(id),
-          title: title,
-          content: content,
+          title: title as string,
+          content: content as string,
         }
 
         const collection = database.db().collection(COLLECTION)
-        return collection.updateOne(
-          { _id: query._id },
-          { $set: { title: query.title, content: query.content } }
-        )
+        return collection.updateOne({ _id: query._id }, { $set: { title: query.title, content: query.content } })
       })
       .then(() => {
         return input
@@ -123,14 +122,10 @@ const dbclient = (function() {
         const { id, title, content } = input
         const _id = new ObjectId(id)
 
-        if (isNullOrUndefined(title) && isNullOrUndefined(content))
-          throw new Error('Required at least one field')
+        if (isNullOrUndefined(title) && isNullOrUndefined(content)) throw new Error('Required at least one field')
 
         const collection = database.db().collection(COLLECTION)
-        return collection.findOneAndUpdate(
-          { _id },
-          { $set: { title, content } }
-        )
+        return collection.findOneAndUpdate({ _id }, { $set: { title, content } })
       })
       .then(({ value }) => ({
         id: value._id.toString(),
